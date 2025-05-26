@@ -1,0 +1,37 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include env.example
+include requirements.txt
+include pyproject.toml
+
+# Include blueprint examples from package directory
+recursive-include src/make_blueprint_creator/blueprints *.json
+
+# Include documentation from docs directory
+recursive-include docs *.md *.rst *.txt *.json
+
+# Include test files from tests directory
+recursive-include tests *.py *.txt *.ini
+
+# Include scripts
+recursive-include scripts *.py
+
+# Exclude development artifacts
+exclude .coverage
+exclude .DS_Store
+exclude *.pyc
+exclude *.pyo
+exclude *.pyd
+exclude __pycache__
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * .DS_Store
+recursive-exclude htmlcov *
+recursive-exclude .pytest_cache *
+recursive-exclude .mypy_cache *
+recursive-exclude venv *
+recursive-exclude .venv *
+recursive-exclude build *
+recursive-exclude dist *
+recursive-exclude *.egg-info * 

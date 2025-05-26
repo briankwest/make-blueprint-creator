@@ -1,0 +1,267 @@
+# Cursor AI Assistant Rules for SignalWire Agents Project
+# =======================================================
+
+## Core Principles
+- **Documentation First**: Every change must be documented with clear reasoning
+- **Change Tracking**: Maintain detailed changelog for all modifications
+- **Code Quality**: Ensure high standards with proper testing and validation
+- **Transparency**: Explain the "why" behind every decision
+
+## Documentation Requirements
+
+### 1. Code Documentation
+- **Function/Method Documentation**: Every function must have comprehensive docstrings
+  ```python
+  def function_name(param1: type, param2: type) -> return_type:
+      """
+      Brief description of what the function does.
+
+      Args:
+          param1 (type): Description of parameter 1
+          param2 (type): Description of parameter 2
+
+      Returns:
+          return_type: Description of what is returned
+
+      Raises:
+          ExceptionType: When this exception might be raised
+
+      Example:
+          >>> function_name("example", 123)
+          "expected_result"
+      """
+  ```
+
+- **Class Documentation**: All classes need comprehensive docstrings
+- **Module Documentation**: Each Python file needs a module-level docstring
+- **Inline Comments**: Complex logic must have explanatory comments
+
+### 2. Change Documentation
+- **Always create/update CHANGELOG.md** when making changes
+- **Document the reasoning** behind each change
+- **Include impact assessment** for modifications
+- **Reference related issues/tickets** when applicable
+
+### 3. README Updates
+- Update README.md when adding new features or changing functionality
+- Include usage examples for new features
+- Update installation/setup instructions if dependencies change
+
+## Change Management Protocol
+
+### Before Making Changes
+1. **Analyze the current state** and document findings
+2. **Identify the problem** or improvement opportunity
+3. **Propose the solution** with clear reasoning
+4. **Assess potential impacts** on existing functionality
+
+### During Changes
+1. **Make incremental changes** with clear commit messages
+2. **Test each change** before proceeding to the next
+3. **Document as you go** - don't leave documentation for later
+4. **Update related files** (tests, docs, configs) simultaneously
+
+### After Changes
+1. **Update CHANGELOG.md** with detailed entry
+2. **Run comprehensive tests** to ensure nothing is broken
+3. **Update documentation** to reflect new functionality
+4. **Verify all related files** are updated consistently
+
+## Code Quality Standards
+
+### Python Code Standards
+- **Follow PEP 8** style guidelines
+- **Use type hints** for all function parameters and return values
+- **Write comprehensive tests** for new functionality
+- **Handle exceptions** appropriately with proper error messages
+- **Use meaningful variable names** that explain their purpose
+- **Keep functions focused** - single responsibility principle
+
+### File Organization
+- **Logical file structure** with clear separation of concerns
+- **Consistent naming conventions** across the project
+- **Proper import organization** (standard library, third-party, local)
+- **Remove unused imports** and dead code
+
+### Configuration Management
+- **Document all configuration options** in comments
+- **Use environment variables** for sensitive data
+- **Provide default values** with explanations
+- **Validate configuration** at startup
+
+## Testing Requirements
+
+### Test Coverage
+- **Write tests for all new functions** and methods
+- **Update existing tests** when modifying functionality
+- **Include edge cases** and error conditions
+- **Test both success and failure scenarios**
+
+### Test Documentation
+- **Clear test names** that describe what is being tested
+- **Document test setup** and expectations
+- **Include integration tests** for complex workflows
+- **Performance tests** for critical paths
+
+## Changelog Format
+
+### CHANGELOG.md Structure
+```markdown
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+### Added
+- New features with detailed descriptions
+
+### Changed
+- Changes in existing functionality with reasoning
+
+### Deprecated
+- Features that will be removed in future versions
+
+### Removed
+- Features removed in this version
+
+### Fixed
+- Bug fixes with problem description and solution
+
+### Security
+- Security improvements and vulnerability fixes
+
+## [Version] - YYYY-MM-DD
+
+### Added
+- Feature description
+  - **Reasoning**: Why this was added
+  - **Impact**: How this affects users/system
+  - **Files Modified**: List of changed files
+```
+
+## Git Commit Standards
+
+### Commit Message Format
+```
+type(scope): brief description
+
+Detailed explanation of the change including:
+- What was changed and why
+- Any breaking changes
+- References to issues/tickets
+
+Co-authored-by: AI Assistant <ai@cursor.com>
+```
+
+### Commit Types
+- **feat**: New feature
+- **fix**: Bug fix
+- **docs**: Documentation changes
+- **style**: Code style changes (formatting, etc.)
+- **refactor**: Code refactoring
+- **test**: Adding or updating tests
+- **chore**: Maintenance tasks
+
+## Error Handling Standards
+
+### Exception Handling
+- **Catch specific exceptions** rather than broad Exception catches
+- **Provide meaningful error messages** that help with debugging
+- **Log errors appropriately** with context information
+- **Graceful degradation** when possible
+
+### Logging Standards
+- **Use structured logging** with appropriate levels
+- **Include context information** in log messages
+- **Don't log sensitive information** (passwords, tokens, etc.)
+- **Use consistent log formats** across the project
+
+## Security Considerations
+
+### Code Security
+- **Never hardcode secrets** in source code
+- **Validate all inputs** to prevent injection attacks
+- **Use secure defaults** for configurations
+- **Regular dependency updates** with security patches
+
+### Documentation Security
+- **Don't include sensitive data** in documentation
+- **Sanitize examples** to remove real credentials
+- **Document security considerations** for new features
+
+## Performance Guidelines
+
+### Code Performance
+- **Profile critical paths** and document performance characteristics
+- **Use appropriate data structures** for the use case
+- **Minimize resource usage** (memory, CPU, network)
+- **Document performance implications** of changes
+
+### Monitoring
+- **Add metrics** for new functionality
+- **Include health checks** for critical components
+- **Document monitoring requirements** for new features
+
+## AI Assistant Behavior
+
+### When Reviewing Code
+1. **Always read the entire file** before making changes
+2. **Understand the context** and existing patterns
+3. **Maintain consistency** with existing code style
+4. **Suggest improvements** beyond the immediate request
+5. **Explain the reasoning** behind all suggestions
+
+### When Making Changes
+1. **Start with documentation** of what you're going to do
+2. **Make changes incrementally** with explanations
+3. **Test changes** as you go
+4. **Update all related files** simultaneously
+5. **Provide a summary** of what was accomplished
+
+### Communication Style
+- **Be explicit** about what you're doing and why
+- **Ask for clarification** when requirements are unclear
+- **Provide alternatives** when multiple solutions exist
+- **Explain trade-offs** between different approaches
+
+## Project-Specific Guidelines
+
+### SignalWire Agents
+- **Follow SignalWire API patterns** and conventions
+- **Document SWML usage** and examples
+- **Include error handling** for API failures
+- **Test with real SignalWire endpoints** when possible
+- **Document rate limits** and usage considerations
+
+### Lambda Functions
+- **Optimize for cold starts** and document performance
+- **Handle timeouts gracefully** with appropriate error messages
+- **Use environment variables** for configuration
+- **Include health check endpoints** for monitoring
+- **Document memory and timeout requirements**
+
+### AWS Integration
+- **Use IAM roles** instead of hardcoded credentials
+- **Document required permissions** for each function
+- **Include CloudFormation templates** for infrastructure
+- **Test deployment procedures** and document steps
+- **Monitor costs** and optimize resource usage
+
+## Enforcement
+
+### Automated Checks
+- **Pre-commit hooks** for code formatting and linting
+- **Automated tests** must pass before merging
+- **Documentation checks** for missing docstrings
+- **Security scans** for vulnerabilities
+
+### Manual Reviews
+- **Code review checklist** including documentation requirements
+- **Architecture review** for significant changes
+- **Security review** for sensitive modifications
+- **Performance review** for critical path changes
+
+---
+
+**Remember**: The goal is not just working code, but maintainable, documented, and well-tested code that others can understand and extend. Every change should make the codebase better than it was before.

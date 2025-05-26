@@ -1,0 +1,149 @@
+{
+  "name": "Simplified Calendar SWAIG",
+  "description": "Simplified AI calendar integration",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "parameters": {
+        "maxResults": 1
+      }
+    },
+    {
+      "id": 2,
+      "module": "builtin:BasicRouter",
+      "version": 1,
+      "mapper": null,
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      },
+      "routes": [
+        {
+          "flow": [
+            {
+              "id": 3,
+              "module": "google-calendar:createAnEvent",
+              "version": 5,
+              "filter": {
+                "conditions": [
+                  [
+                    {
+                      "a": "{{1.function}}",
+                      "b": "create_event",
+                      "o": "text:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "calendar": "primary",
+                "summary": "{{1.argument.summary}}",
+                "start": "{{1.argument.start_time}}",
+                "duration": "{{1.argument.duration}}",
+                "description": "{{1.argument.description}}"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 600,
+                  "y": -100
+                }
+              }
+            },
+            {
+              "id": 4,
+              "module": "gateway:WebhookRespond",
+              "version": 1,
+              "mapper": {
+                "status": "200",
+                "body": "{\"result\": \"Event created successfully\"}"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": -100
+                }
+              }
+            }
+          ]
+        },
+        {
+          "flow": [
+            {
+              "id": 5,
+              "module": "google-calendar:getFreeBusyInformation",
+              "version": 5,
+              "filter": {
+                "conditions": [
+                  [
+                    {
+                      "a": "{{1.function}}",
+                      "b": "check_availability",
+                      "o": "text:equal"
+                    }
+                  ]
+                ]
+              },
+              "mapper": {
+                "timeMin": "{{1.argument.start_time}}",
+                "timeMax": "{{1.argument.end_time}}",
+                "item": [
+                  {
+                    "id": "primary"
+                  }
+                ]
+              },
+              "metadata": {
+                "designer": {
+                  "x": 600,
+                  "y": 100
+                }
+              }
+            },
+            {
+              "id": 6,
+              "module": "gateway:WebhookRespond",
+              "version": 1,
+              "mapper": {
+                "status": "200",
+                "body": "{\"available\": \"{{empty(5.calendars.primary.busy)}}\"}"
+              },
+              "metadata": {
+                "designer": {
+                  "x": 900,
+                  "y": 100
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false,
+      "freshVariables": false
+    },
+    "designer": {
+      "orphans": []
+    }
+  }
+}

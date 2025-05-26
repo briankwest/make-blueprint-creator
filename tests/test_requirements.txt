@@ -1,0 +1,26 @@
+# Testing dependencies for Make.com Blueprint Creator
+# Install with: pip install -r test_requirements.txt
+
+# Core testing framework (included in Python standard library)
+# unittest - no additional install needed
+
+# Enhanced testing and coverage tools
+coverage>=7.0.0          # Code coverage measurement
+pytest>=7.0.0            # Alternative test runner with more features
+pytest-cov>=4.0.0        # Coverage plugin for pytest
+pytest-mock>=3.10.0      # Enhanced mocking for pytest
+
+# Code quality and linting
+flake8>=6.0.0            # Code style checker
+black>=23.0.0            # Code formatter
+mypy>=1.0.0              # Static type checker
+
+# Test data and utilities
+factory-boy>=3.2.0       # Test data generation
+faker>=18.0.0            # Fake data generation
+
+# Performance testing
+pytest-benchmark>=4.0.0  # Performance benchmarking
+
+# Parallel test execution
+pytest-xdist>=3.0.0      # Run tests in parallel 

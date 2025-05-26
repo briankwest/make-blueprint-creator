@@ -1,0 +1,1511 @@
+{
+    "name": "Google Calendar SWAIG Scenario",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 836593,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -245,
+                    "y": -256
+                },
+                "restore": {
+                    "parameters": {
+                        "hook": {
+                            "data": {
+                                "editable": "true"
+                            },
+                            "label": "SWAIG Server"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook:gateway-webhook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "app_name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "global_data",
+                        "spec": [
+                            {
+                                "name": "caller_id_name",
+                                "type": "text"
+                            },
+                            {
+                                "name": "caller_id_number",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "project_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "space_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "caller_id_name",
+                        "type": "text"
+                    },
+                    {
+                        "name": "caller_id_num",
+                        "type": "text"
+                    },
+                    {
+                        "name": "channel_active",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "channel_offhook",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "channel_ready",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "content_type",
+                        "type": "text"
+                    },
+                    {
+                        "name": "version",
+                        "type": "text"
+                    },
+                    {
+                        "name": "content_disposition",
+                        "type": "text"
+                    },
+                    {
+                        "name": "function",
+                        "type": "text"
+                    },
+                    {
+                        "name": "argument",
+                        "spec": [
+                            {
+                                "name": "parsed",
+                                "spec": {
+                                    "spec": [
+                                        {
+                                            "name": "start_time",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "length",
+                                            "type": "number"
+                                        },
+                                        {
+                                            "name": "timezone",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "email",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "summary",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "description",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "name": "location",
+                                            "type": "text"
+                                        }
+                                    ],
+                                    "type": "collection"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "name": "raw",
+                                "type": "text"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "call_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "ai_session_id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "argument_desc",
+                        "spec": [
+                            {
+                                "name": "type",
+                                "type": "text"
+                            },
+                            {
+                                "name": "properties",
+                                "spec": [
+                                    {
+                                        "name": "start_time",
+                                        "spec": [
+                                            {
+                                                "name": "type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "description",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "length",
+                                        "spec": [
+                                            {
+                                                "name": "type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "description",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "timezone",
+                                        "spec": [
+                                            {
+                                                "name": "type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "description",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "email",
+                                        "spec": [
+                                            {
+                                                "name": "type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "description",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "summary",
+                                        "spec": [
+                                            {
+                                                "name": "type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "description",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "spec": [
+                                            {
+                                                "name": "type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "description",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    },
+                                    {
+                                        "name": "location",
+                                        "spec": [
+                                            {
+                                                "name": "type",
+                                                "type": "text"
+                                            },
+                                            {
+                                                "name": "description",
+                                                "type": "text"
+                                            }
+                                        ],
+                                        "type": "collection"
+                                    }
+                                ],
+                                "type": "collection"
+                            }
+                        ],
+                        "type": "collection"
+                    },
+                    {
+                        "name": "purpose",
+                        "type": "text"
+                    },
+                    {
+                        "name": "__IMTHEADERS__",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name"
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers"
+                    },
+                    {
+                        "name": "__IMTMETHOD__",
+                        "type": "text",
+                        "label": "Method"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 22,
+            "module": "google-calendar:getACalendar",
+            "version": 5,
+            "parameters": {
+                "__IMTCONN__": 3499150
+            },
+            "mapper": {
+                "calendar": "brian@signalwire.com"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 72,
+                    "y": -256
+                },
+                "restore": {
+                    "expect": {
+                        "calendar": {
+                            "mode": "edit"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google"
+                            },
+                            "label": "My Google connection (brian@signalwire.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "mode": "edit",
+                        "name": "calendar",
+                        "type": "select",
+                        "label": "Calendar ID",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 393,
+                    "y": -256
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 11,
+                            "module": "google-calendar:createAnEvent",
+                            "version": 5,
+                            "parameters": {
+                                "__IMTCONN__": 3499150
+                            },
+                            "filter": {
+                                "name": "",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.function}}",
+                                            "b": "events",
+                                            "o": "text:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "start": "{{1.argument.parsed[].start_time}}",
+                                "select": "detail",
+                                "summary": "{{1.argument.parsed[].summary}}",
+                                "calendar": "brian@signalwire.com",
+                                "duration": "{{1.argument.parsed[].length}}",
+                                "location": "{{1.argument.parsed[].location}}",
+                                "overrides": [
+                                    {
+                                        "method": "popup",
+                                        "minutes": "10"
+                                    }
+                                ],
+                                "visibility": "default",
+                                "allDayEvent": false,
+                                "description": "{{1.argument.parsed[].description}}",
+                                "sendUpdates": "all",
+                                "transparency": "opaque",
+                                "conferenceDate": false,
+                                "guestPermissions": {
+                                    "guestsCanModify": false,
+                                    "guestsCanInviteOthers": true,
+                                    "guestsCanSeeOtherGuests": true
+                                }
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 700,
+                                    "y": -593
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "end": {
+                                            "collapsed": true
+                                        },
+                                        "select": {
+                                            "label": "In Detail"
+                                        },
+                                        "colorId": {
+                                            "mode": "chose"
+                                        },
+                                        "calendar": {
+                                            "mode": "chose",
+                                            "label": "brian@signalwire.com (Primary Calendar)"
+                                        },
+                                        "attendees": {
+                                            "mode": "chose"
+                                        },
+                                        "overrides": {
+                                            "mode": "chose",
+                                            "items": [
+                                                {
+                                                    "method": {
+                                                        "mode": "chose",
+                                                        "label": "Pop-up"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "recurrence": {
+                                            "mode": "chose"
+                                        },
+                                        "visibility": {
+                                            "mode": "chose",
+                                            "label": "Default"
+                                        },
+                                        "allDayEvent": {
+                                            "mode": "chose"
+                                        },
+                                        "attachments": {
+                                            "mode": "chose"
+                                        },
+                                        "sendUpdates": {
+                                            "mode": "chose",
+                                            "label": "To All Guests"
+                                        },
+                                        "transparency": {
+                                            "mode": "chose",
+                                            "label": "Busy"
+                                        },
+                                        "conferenceDate": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "google"
+                                            },
+                                            "label": "My Google connection (brian@signalwire.com)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:google",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "select",
+                                        "type": "select",
+                                        "label": "Create an Event",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "quick",
+                                                "detail"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "calendar",
+                                        "type": "select",
+                                        "label": "Calendar ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "colorId",
+                                        "type": "select",
+                                        "label": "Color"
+                                    },
+                                    {
+                                        "name": "summary",
+                                        "type": "text",
+                                        "label": "Event Name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "allDayEvent",
+                                        "type": "boolean",
+                                        "label": "All Day Event",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "start",
+                                        "time": true,
+                                        "type": "date",
+                                        "label": "Start Date",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "end",
+                                        "time": true,
+                                        "type": "date",
+                                        "label": "End Date"
+                                    },
+                                    {
+                                        "name": "duration",
+                                        "type": "time",
+                                        "label": "Duration"
+                                    },
+                                    {
+                                        "name": "description",
+                                        "type": "text",
+                                        "label": "Description"
+                                    },
+                                    {
+                                        "name": "location",
+                                        "type": "text",
+                                        "label": "Location"
+                                    },
+                                    {
+                                        "name": "useDefault",
+                                        "type": "boolean",
+                                        "label": "Use the default reminder settings for this event"
+                                    },
+                                    {
+                                        "name": "overrides",
+                                        "spec": [
+                                            {
+                                                "name": "method",
+                                                "type": "select",
+                                                "label": "Method",
+                                                "options": [
+                                                    {
+                                                        "label": "Email",
+                                                        "value": "email"
+                                                    },
+                                                    {
+                                                        "label": "Pop-up",
+                                                        "value": "popup"
+                                                    }
+                                                ],
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "minutes",
+                                                "type": "uinteger",
+                                                "label": "Minutes",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 40320
+                                                }
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Reminders",
+                                        "validate": {
+                                            "maxItems": 5
+                                        }
+                                    },
+                                    {
+                                        "name": "attendees",
+                                        "spec": [
+                                            {
+                                                "name": "displayName",
+                                                "type": "text",
+                                                "label": "Name"
+                                            },
+                                            {
+                                                "name": "email",
+                                                "type": "email",
+                                                "label": "Email",
+                                                "required": true
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Attendees"
+                                    },
+                                    {
+                                        "name": "transparency",
+                                        "type": "select",
+                                        "label": "Show me as",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "opaque",
+                                                "transparent"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "visibility",
+                                        "type": "select",
+                                        "label": "Visibility",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "default",
+                                                "public",
+                                                "private"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "sendUpdates",
+                                        "type": "select",
+                                        "label": "Send notifications about the event creation",
+                                        "validate": {
+                                            "enum": [
+                                                "all",
+                                                "externalOnly",
+                                                "none"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "guestPermissions",
+                                        "spec": [
+                                            {
+                                                "name": "guestsCanModify",
+                                                "type": "boolean",
+                                                "label": "Modify event",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "guestsCanInviteOthers",
+                                                "type": "boolean",
+                                                "label": "Invite others",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "guestsCanSeeOtherGuests",
+                                                "type": "boolean",
+                                                "label": "See guest list",
+                                                "required": true
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Guest Permissions"
+                                    },
+                                    {
+                                        "name": "recurrence",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "text",
+                                            "label": "Value"
+                                        },
+                                        "type": "array",
+                                        "label": "Recurrence"
+                                    },
+                                    {
+                                        "name": "conferenceDate",
+                                        "type": "boolean",
+                                        "label": "Add Google Meet Video Conferencing",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "attachments",
+                                        "spec": [
+                                            {
+                                                "name": "fileUrl",
+                                                "type": "url",
+                                                "label": "File URL",
+                                                "required": true
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Attachments"
+                                    }
+                                ],
+                                "advanced": true
+                            },
+                            "onerror": [
+                                {
+                                    "id": 18,
+                                    "module": "json:CreateJSON",
+                                    "version": 1,
+                                    "parameters": {
+                                        "type": 110985,
+                                        "space": ""
+                                    },
+                                    "mapper": {
+                                        "response": "Event wasn't created successfully"
+                                    },
+                                    "metadata": {
+                                        "designer": {
+                                            "x": 707,
+                                            "y": -288
+                                        },
+                                        "restore": {
+                                            "parameters": {
+                                                "type": {
+                                                    "label": "My data structure"
+                                                },
+                                                "space": {
+                                                    "label": "Empty"
+                                                }
+                                            }
+                                        },
+                                        "parameters": [
+                                            {
+                                                "name": "type",
+                                                "type": "udt",
+                                                "label": "Data structure",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "space",
+                                                "type": "select",
+                                                "label": "Indentation",
+                                                "validate": {
+                                                    "enum": [
+                                                        "tab",
+                                                        "2",
+                                                        "4"
+                                                    ]
+                                                }
+                                            }
+                                        ],
+                                        "expect": [
+                                            {
+                                                "name": "response",
+                                                "type": "text",
+                                                "label": null
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "id": 19,
+                                    "module": "gateway:WebhookRespond",
+                                    "version": 1,
+                                    "parameters": {},
+                                    "mapper": {
+                                        "body": "{{18.json}}",
+                                        "status": "200",
+                                        "headers": []
+                                    },
+                                    "metadata": {
+                                        "designer": {
+                                            "x": 996,
+                                            "y": -288
+                                        },
+                                        "restore": {
+                                            "expect": {
+                                                "headers": {
+                                                    "mode": "chose"
+                                                }
+                                            }
+                                        },
+                                        "expect": [
+                                            {
+                                                "name": "status",
+                                                "type": "uinteger",
+                                                "label": "Status",
+                                                "required": true,
+                                                "validate": {
+                                                    "min": 100
+                                                }
+                                            },
+                                            {
+                                                "name": "body",
+                                                "type": "any",
+                                                "label": "Body"
+                                            },
+                                            {
+                                                "name": "headers",
+                                                "spec": [
+                                                    {
+                                                        "name": "key",
+                                                        "type": "text",
+                                                        "label": "Key",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "max": 256
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "value",
+                                                        "type": "text",
+                                                        "label": "Value",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "max": 4096
+                                                        }
+                                                    }
+                                                ],
+                                                "type": "array",
+                                                "label": "Custom headers",
+                                                "validate": {
+                                                    "maxItems": 16
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": 16,
+                            "module": "json:CreateJSON",
+                            "version": 1,
+                            "parameters": {
+                                "type": 110984,
+                                "space": ""
+                            },
+                            "mapper": {
+                                "response": "Event created successfully"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1008,
+                                    "y": -589
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "type": {
+                                            "label": "My data structure"
+                                        },
+                                        "space": {
+                                            "label": "Empty"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "type",
+                                        "type": "udt",
+                                        "label": "Data structure",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "space",
+                                        "type": "select",
+                                        "label": "Indentation",
+                                        "validate": {
+                                            "enum": [
+                                                "tab",
+                                                "2",
+                                                "4"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "response",
+                                        "type": "text",
+                                        "label": null,
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 17,
+                            "module": "gateway:WebhookRespond",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "body": "{{16.json}}",
+                                "status": "200",
+                                "headers": []
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1312,
+                                    "y": -590
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "headers": {
+                                            "mode": "chose"
+                                        }
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "status",
+                                        "type": "uinteger",
+                                        "label": "Status",
+                                        "required": true,
+                                        "validate": {
+                                            "min": 100
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 256
+                                                }
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 4096
+                                                }
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Custom headers",
+                                        "validate": {
+                                            "maxItems": 16
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 7,
+                            "module": "google-calendar:getFreeBusyInformation",
+                            "version": 5,
+                            "parameters": {
+                                "__IMTCONN__": 3499150
+                            },
+                            "filter": {
+                                "name": "",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.function}}",
+                                            "b": "freebusy",
+                                            "o": "text:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "item": [
+                                    {
+                                        "id": "brian@signalwire.com"
+                                    }
+                                ],
+                                "timeMax": "{{addMinutes(1.argument.parsed[].start_time; 1.argument.parsed[].length)}}",
+                                "timeMin": "{{1.argument.parsed[].start_time}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 695,
+                                    "y": -22
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "item": {
+                                            "mode": "chose",
+                                            "items": [
+                                                {
+                                                    "id": {
+                                                        "mode": "edit"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "google"
+                                            },
+                                            "label": "My Google connection (brian@signalwire.com)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:google",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "timeMin",
+                                        "time": true,
+                                        "type": "date",
+                                        "label": "Minimum Time",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "timeMax",
+                                        "time": true,
+                                        "type": "date",
+                                        "label": "Maximum Time",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "item",
+                                        "spec": [
+                                            {
+                                                "mode": "edit",
+                                                "name": "id",
+                                                "type": "select",
+                                                "label": "Calendar ID",
+                                                "dynamic": true,
+                                                "options": [],
+                                                "required": true
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Calendars",
+                                        "required": true
+                                    }
+                                ]
+                            },
+                            "onerror": [
+                                {
+                                    "id": 20,
+                                    "module": "json:CreateJSON",
+                                    "version": 1,
+                                    "parameters": {
+                                        "type": 110986,
+                                        "space": ""
+                                    },
+                                    "mapper": {
+                                        "response": "Error checking that time try a different time"
+                                    },
+                                    "metadata": {
+                                        "designer": {
+                                            "x": 708,
+                                            "y": 291
+                                        },
+                                        "restore": {
+                                            "parameters": {
+                                                "type": {
+                                                    "label": "My data structure"
+                                                },
+                                                "space": {
+                                                    "label": "Empty"
+                                                }
+                                            }
+                                        },
+                                        "parameters": [
+                                            {
+                                                "name": "type",
+                                                "type": "udt",
+                                                "label": "Data structure",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "space",
+                                                "type": "select",
+                                                "label": "Indentation",
+                                                "validate": {
+                                                    "enum": [
+                                                        "tab",
+                                                        "2",
+                                                        "4"
+                                                    ]
+                                                }
+                                            }
+                                        ],
+                                        "expect": [
+                                            {
+                                                "name": "response",
+                                                "type": "text",
+                                                "label": null
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "id": 21,
+                                    "module": "gateway:WebhookRespond",
+                                    "version": 1,
+                                    "parameters": {},
+                                    "mapper": {
+                                        "body": "{{20.json}}",
+                                        "status": "200",
+                                        "headers": []
+                                    },
+                                    "metadata": {
+                                        "designer": {
+                                            "x": 1018,
+                                            "y": 287
+                                        },
+                                        "restore": {
+                                            "expect": {
+                                                "headers": {
+                                                    "mode": "chose"
+                                                }
+                                            }
+                                        },
+                                        "expect": [
+                                            {
+                                                "name": "status",
+                                                "type": "uinteger",
+                                                "label": "Status",
+                                                "required": true,
+                                                "validate": {
+                                                    "min": 100
+                                                }
+                                            },
+                                            {
+                                                "name": "body",
+                                                "type": "any",
+                                                "label": "Body"
+                                            },
+                                            {
+                                                "name": "headers",
+                                                "spec": [
+                                                    {
+                                                        "name": "key",
+                                                        "type": "text",
+                                                        "label": "Key",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "max": 256
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "value",
+                                                        "type": "text",
+                                                        "label": "Value",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "max": 4096
+                                                        }
+                                                    }
+                                                ],
+                                                "type": "array",
+                                                "label": "Custom headers",
+                                                "validate": {
+                                                    "maxItems": 16
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 998,
+                                    "y": -20
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 23,
+                                            "module": "json:CreateJSON",
+                                            "version": 1,
+                                            "parameters": {
+                                                "type": 110987,
+                                                "space": ""
+                                            },
+                                            "filter": {
+                                                "name": "free",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{length(7.calendars.`brian@signalwire.com`.busy)}}",
+                                                            "b": "0",
+                                                            "o": "text:equal"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "response": "Time is available"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1257,
+                                                    "y": -140
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "type": {
+                                                            "label": "My data structure"
+                                                        },
+                                                        "space": {
+                                                            "label": "Empty"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "type",
+                                                        "type": "udt",
+                                                        "label": "Data structure",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "space",
+                                                        "type": "select",
+                                                        "label": "Indentation",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "tab",
+                                                                "2",
+                                                                "4"
+                                                            ]
+                                                        }
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "response",
+                                                        "type": "text",
+                                                        "label": null
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 24,
+                                            "module": "gateway:WebhookRespond",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "body": "{{23.json}}",
+                                                "status": "200",
+                                                "headers": []
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1559,
+                                                    "y": -139
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "headers": {
+                                                            "mode": "chose"
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "status",
+                                                        "type": "uinteger",
+                                                        "label": "Status",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "min": 100
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": [
+                                                            {
+                                                                "name": "key",
+                                                                "type": "text",
+                                                                "label": "Key",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 256
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "text",
+                                                                "label": "Value",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 4096
+                                                                }
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Custom headers",
+                                                        "validate": {
+                                                            "maxItems": 16
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 25,
+                                            "module": "json:CreateJSON",
+                                            "version": 1,
+                                            "parameters": {
+                                                "type": 110989,
+                                                "space": ""
+                                            },
+                                            "filter": {
+                                                "name": "busy",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{length(7.calendars.`brian@signalwire.com`.busy)}}",
+                                                            "b": "0",
+                                                            "o": "number:greater"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "response": "Time is NOT available"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1259,
+                                                    "y": 111
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "type": {
+                                                            "label": "My data structure"
+                                                        },
+                                                        "space": {
+                                                            "label": "Empty"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "type",
+                                                        "type": "udt",
+                                                        "label": "Data structure",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "space",
+                                                        "type": "select",
+                                                        "label": "Indentation",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "tab",
+                                                                "2",
+                                                                "4"
+                                                            ]
+                                                        }
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "response",
+                                                        "type": "text",
+                                                        "label": null
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 26,
+                                            "module": "gateway:WebhookRespond",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "body": "{{25.json}}",
+                                                "status": "200",
+                                                "headers": []
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1569,
+                                                    "y": 107
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "headers": {
+                                                            "mode": "chose"
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "status",
+                                                        "type": "uinteger",
+                                                        "label": "Status",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "min": 100
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": [
+                                                            {
+                                                                "name": "key",
+                                                                "type": "text",
+                                                                "label": "Key",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 256
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "text",
+                                                                "label": "Value",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 4096
+                                                                }
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Custom headers",
+                                                        "validate": {
+                                                            "maxItems": 16
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us2.make.com",
+        "notes": [
+            {
+                "moduleIds": [
+                    2
+                ],
+                "content": "<p>Function Router</p>",
+                "isFilterNote": false,
+                "metadata": {
+                    "color": "#9138FE"
+                }
+            }
+        ]
+    }
+}
