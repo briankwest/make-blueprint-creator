@@ -646,6 +646,59 @@ class MakeBlueprintCreator:
         logger.info(f"Replaced {len(hook_mapping)} hook IDs in blueprint")
         return updated_blueprint
 
+    def replace_hardcoded_hooks_in_blueprint_with_mapping(
+        self,
+        blueprint: Dict[str, Any],
+        hook_mapping: Optional[Dict[int, int]] = None,
+        create_new_hooks: bool = True,
+        webhook_name_prefix: str = "Auto-created Webhook",
+    ) -> tuple[Dict[str, Any], Dict[int, int]]:
+        """
+        Replace hardcoded hook IDs in a blueprint with new ones and return the mapping.
+
+        Args:
+            blueprint (Dict[str, Any]): Blueprint to process
+            hook_mapping (Optional[Dict[int, int]]): Mapping of old hook ID to new hook ID
+            create_new_hooks (bool): Whether to create new hooks automatically
+            webhook_name_prefix (str): Prefix for auto-created webhook names
+
+        Returns:
+            tuple: (Updated blueprint with new hook IDs, Hook mapping dictionary)
+        """
+        import copy
+
+        updated_blueprint = copy.deepcopy(blueprint)
+
+        if hook_mapping is None:
+            hook_mapping = {}
+
+        # Find all hardcoded hook IDs in the blueprint
+        hardcoded_hooks = self._find_hardcoded_hooks(updated_blueprint)
+
+        logger.info(f"Found {len(hardcoded_hooks)} hardcoded hook references")
+
+        # Create new hooks for any unmapped hardcoded hooks
+        for old_hook_id in hardcoded_hooks:
+            if old_hook_id not in hook_mapping:
+                if create_new_hooks:
+                    # Create a new webhook
+                    webhook_name = f"{webhook_name_prefix} {old_hook_id}"
+                    new_hook = self.create_webhook(
+                        name=webhook_name, type_name="gateway-webhook", method=False, headers=False, stringify=False
+                    )
+                    hook_mapping[old_hook_id] = new_hook["id"]
+                    logger.info(f"Created new webhook {new_hook['id']} to replace hardcoded hook {old_hook_id}")
+                else:
+                    logger.warning(
+                        f"No mapping provided for hardcoded hook {old_hook_id} and create_new_hooks is False"
+                    )
+
+        # Replace hook IDs in the blueprint
+        self._replace_hook_ids_recursive(updated_blueprint, hook_mapping)
+
+        logger.info(f"Replaced {len(hook_mapping)} hook IDs in blueprint")
+        return updated_blueprint, hook_mapping
+
     def _find_hardcoded_hooks(self, data: Any, hooks: Optional[set] = None) -> set:
         """
         Recursively find all hardcoded hook IDs in blueprint data.
@@ -718,7 +771,7 @@ class MakeBlueprintCreator:
             webhook_name_prefix (str): Prefix for auto-created webhook names
 
         Returns:
-            Dict[str, Any]: Created scenario data with hook mapping info
+            Dict[str, Any]: Created scenario data with webhook information included
         """
         # Parse blueprint if it's a string
         if isinstance(blueprint, str):
@@ -729,8 +782,11 @@ class MakeBlueprintCreator:
         else:
             blueprint_dict = blueprint
 
-        # Replace hardcoded hooks with new ones
-        updated_blueprint = self.replace_hardcoded_hooks_in_blueprint(
+        # Find hardcoded hooks before replacement
+        hardcoded_hooks = self._find_hardcoded_hooks(blueprint_dict)
+        
+        # Replace hardcoded hooks with new ones and track the mapping
+        updated_blueprint, hook_mapping = self.replace_hardcoded_hooks_in_blueprint_with_mapping(
             blueprint_dict, create_new_hooks=True, webhook_name_prefix=webhook_name_prefix
         )
 
@@ -738,6 +794,23 @@ class MakeBlueprintCreator:
         scenario_data = self.create_scenario(
             blueprint=updated_blueprint, name=name, folder_id=folder_id, scheduling=scheduling
         )
+
+        # Get webhook details for the created hooks
+        webhooks = []
+        for old_hook_id, new_hook_id in hook_mapping.items():
+            try:
+                hook_details = self.get_hook_details(new_hook_id)
+                webhooks.append({
+                    'id': new_hook_id,
+                    'name': hook_details.get('name', 'Unknown'),
+                    'url': hook_details.get('url', 'Unknown'),
+                    'replaced_hook_id': old_hook_id
+                })
+            except Exception as e:
+                logger.warning(f"Could not get details for hook {new_hook_id}: {e}")
+
+        # Add webhook information to scenario data
+        scenario_data['webhooks'] = webhooks
 
         logger.info(f"Created scenario with new hooks: {scenario_data.get('name')} (ID: {scenario_data.get('id')})")
         return scenario_data

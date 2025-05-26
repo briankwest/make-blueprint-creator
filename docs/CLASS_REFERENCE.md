@@ -1637,6 +1637,38 @@ new_hooks = creator._find_hardcoded_hooks(updated_blueprint)
 print(f"Replaced hooks: {original_hooks} -> {new_hooks}")
 ```
 
+#### **`replace_hardcoded_hooks_in_blueprint_with_mapping(blueprint: Dict[str, Any], hook_mapping: Optional[Dict[int, int]] = None, create_new_hooks: bool = True, webhook_name_prefix: str = "Auto-created Webhook") -> tuple[Dict[str, Any], Dict[int, int]]`**
+
+Replace hardcoded hook IDs in a blueprint with new ones and return the mapping.
+
+**Parameters:**
+- `blueprint` (Dict[str, Any]): Blueprint to process
+- `hook_mapping` (Optional[Dict[int, int]]): Mapping of old hook ID to new hook ID
+- `create_new_hooks` (bool): Whether to create new hooks automatically
+- `webhook_name_prefix` (str): Prefix for auto-created webhook names
+
+**Returns:** Tuple of (Updated blueprint with new hook IDs, Hook mapping dictionary)
+
+**Example:**
+```python
+# Replace hardcoded hooks and get the mapping
+updated_blueprint, hook_mapping = creator.replace_hardcoded_hooks_in_blueprint_with_mapping(
+    blueprint=my_blueprint,
+    create_new_hooks=True,
+    webhook_name_prefix="My App Webhook"
+)
+
+print(f"Hook mapping: {hook_mapping}")
+# Output: Hook mapping: {836593: 840728}
+
+# Get webhook details for the new hooks
+for old_id, new_id in hook_mapping.items():
+    hook_details = creator.get_hook_details(new_id)
+    print(f"Replaced hook {old_id} with {new_id}")
+    print(f"Webhook URL: {hook_details['url']}")
+    print(f"Webhook Name: {hook_details['name']}")
+```
+
 #### **`create_scenario_with_new_hooks(blueprint: Union[Dict[str, Any], str], name: Optional[str] = None, folder_id: Optional[int] = None, scheduling: Optional[Dict[str, Any]] = None, webhook_name_prefix: str = "Auto-created Webhook") -> Dict[str, Any]`**
 
 Create a scenario from a blueprint, automatically creating new webhooks for any hardcoded hook IDs.
@@ -1648,7 +1680,7 @@ Create a scenario from a blueprint, automatically creating new webhooks for any 
 - `scheduling` (Optional[Dict[str, Any]]): Scheduling configuration
 - `webhook_name_prefix` (str): Prefix for auto-created webhook names
 
-**Returns:** Created scenario data
+**Returns:** Created scenario data with webhook information included
 
 **Example:**
 ```python
@@ -1662,11 +1694,19 @@ scenario = creator.create_scenario_with_new_hooks(
 print(f"Created scenario: {scenario['id']}")
 print(f"Scenario name: {scenario['name']}")
 
+# Access webhook information
+webhooks = scenario.get('webhooks', [])
+for webhook in webhooks:
+    print(f"Webhook: {webhook['name']}")
+    print(f"URL: {webhook['url']}")
+    print(f"ID: {webhook['id']} (replaced {webhook['replaced_hook_id']})")
+
 # The method automatically:
 # 1. Finds hardcoded hook IDs in the blueprint
 # 2. Creates new webhooks for each hardcoded hook
 # 3. Replaces the hardcoded IDs with new webhook IDs
 # 4. Creates the scenario with the updated blueprint
+# 5. Returns scenario data with webhook information
 ```
 
 ### **Webhook Management Workflow Examples**

@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Webhook URL Display in CLI**: Enhanced `make-google-calendar-swaig` CLI to display webhook URLs after scenario deployment
+  - **Feature**: The CLI now shows the webhook URL(s) that are created when deploying a scenario
+  - **Implementation**: Enhanced `create_scenario_with_new_hooks()` method to return webhook information including URLs
+  - **User Experience**: Users can immediately see the webhook URL to use in their SWAIG application configuration
+  - **Files Modified**: 
+    - `src/make_blueprint_creator/core/blueprint_creator.py` - Added `replace_hardcoded_hooks_in_blueprint_with_mapping()` method
+    - `src/make_blueprint_creator/cli/google_calendar_swaig.py` - Enhanced deployment output to show webhook URLs
+  - **Example Output**: 
+    ```
+    🔗 Webhook URLs:
+       📡 Google Calendar SWAIG - user@example.com 836593: https://hook.us2.make.com/...
+    
+    🎯 Primary SWAIG Webhook URL:
+       https://hook.us2.make.com/...
+    
+    💡 Use this URL in your SWAIG application configuration.
+    ```
 - **Google Calendar SWAIG Integration** - Complete SignalWire AI Gateway integration for voice-controlled calendar operations
   - **Reasoning**: Enables natural language calendar management through AI-powered voice interactions
   - **Impact**: Provides ready-to-use SWAIG scenario for calendar automation

@@ -564,11 +564,25 @@ Environment Variables:
                         webhook_name_prefix=f"Google Calendar SWAIG - {config['email']}"
                     )
                     scenario_id = scenario.get('id')
+                    webhooks = scenario.get('webhooks', [])
                     
                     print(f"✅ Scenario created successfully!")
                     print(f"📋 Scenario ID: {scenario_id}")
                     print(f"🌐 Scenario Name: {config['scenario_name']}")
                     print(f"📧 Calendar Email: {config['email']}")
+                    
+                    # Display webhook URLs
+                    if webhooks:
+                        print(f"\n🔗 Webhook URLs:")
+                        for webhook in webhooks:
+                            print(f"   📡 {webhook['name']}: {webhook['url']}")
+                        
+                        # Show the primary webhook URL prominently
+                        primary_webhook = webhooks[0] if webhooks else None
+                        if primary_webhook:
+                            print(f"\n🎯 Primary SWAIG Webhook URL:")
+                            print(f"   {primary_webhook['url']}")
+                            print(f"\n💡 Use this URL in your SWAIG application configuration.")
                     
                     # Handle activation
                     if args.activate and scenario_id:
@@ -599,10 +613,15 @@ Environment Variables:
             
             # Show usage instructions
             print(f"\n📋 Usage Instructions:")
-            print(f"1. Import {blueprint_file} into Make.com")
-            print(f"2. Configure your Google Calendar connection")
-            print(f"3. Set up the webhook URL in your SWAIG application")
-            print(f"4. Test with SWAIG functions: 'events' and 'freebusy'")
+            if not args.output_only and not args.no_deploy:
+                print(f"1. Configure your Google Calendar connection in Make.com")
+                print(f"2. Use the webhook URL shown above in your SWAIG application")
+                print(f"3. Test with SWAIG functions: 'events' and 'freebusy'")
+            else:
+                print(f"1. Import {blueprint_file} into Make.com")
+                print(f"2. Configure your Google Calendar connection")
+                print(f"3. Set up the webhook URL in your SWAIG application")
+                print(f"4. Test with SWAIG functions: 'events' and 'freebusy'")
         
     except KeyboardInterrupt:
         if not args.quiet:
