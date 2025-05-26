@@ -47,6 +47,30 @@ class MakeConfig:
 
 #### **Methods**
 
+##### **`from_env() -> MakeConfig`** (Class Method)
+Create MakeConfig instance from environment variables.
+
+**Environment Variables**:
+- `MAKE_API_TOKEN` (required): Your Make.com API token
+- `MAKE_TEAM_ID` (conditional): Team ID for team-based access
+- `MAKE_ORGANIZATION_ID` (conditional): Organization ID for org-based access  
+- `MAKE_API_BASE_URL` (optional): API base URL (defaults to US region)
+
+**Returns**: MakeConfig instance
+
+**Raises**: `MakeConfigError` if required environment variables are missing
+
+**Example**:
+```python
+# Set environment variables first
+import os
+os.environ['MAKE_API_TOKEN'] = 'your_token'
+os.environ['MAKE_TEAM_ID'] = '123'
+
+# Create config from environment
+config = MakeConfig.from_env()
+```
+
 ##### **`get_default_params() -> Dict[str, Any]`**
 Returns default query parameters for API requests based on configuration.
 
@@ -95,9 +119,13 @@ config = MakeConfig(
 
 ##### **Environment Variable Configuration**
 ```python
-import os
 from make_blueprint_creator.core import MakeConfig
 
+# Recommended: Use the from_env() class method
+config = MakeConfig.from_env()
+
+# Alternative: Manual environment variable handling
+import os
 config = MakeConfig(
     api_token=os.getenv('MAKE_API_TOKEN'),
     team_id=int(os.getenv('MAKE_TEAM_ID')),
@@ -1450,6 +1478,284 @@ blueprint = creator.create_simple_blueprint(
 
 # Deploy to all environments
 results = env_manager.deploy_to_all_environments(blueprint, "API Integration")
+```
+
+---
+
+## 🔗 **Webhook Management Methods**
+
+The MakeBlueprintCreator class includes comprehensive webhook management functionality to handle webhook creation, assignment conflicts, and automatic hook replacement in blueprints.
+
+### **Hook Listing and Management**
+
+#### **`list_hooks(type_name: Optional[str] = None, assigned: Optional[bool] = None, view_for_scenario_id: Optional[int] = None) -> List[Dict[str, Any]]`**
+
+List all hooks/webhooks for the team.
+
+**Parameters:**
+- `type_name` (Optional[str]): Filter by hook type (e.g., 'gateway-webhook')
+- `assigned` (Optional[bool]): Filter by assignment status
+- `view_for_scenario_id` (Optional[int]): Show hooks available for specific scenario
+
+**Returns:** List of hooks with details
+
+**Example:**
+```python
+# List all hooks
+hooks = creator.list_hooks()
+print(f"Total hooks: {len(hooks)}")
+
+# List only unassigned gateway webhooks
+unassigned_webhooks = creator.list_hooks(
+    type_name="gateway-webhook",
+    assigned=False
+)
+
+# List hooks available for a specific scenario
+available_hooks = creator.list_hooks(view_for_scenario_id=123)
+```
+
+#### **`create_webhook(name: str, type_name: str = "gateway-webhook", method: bool = False, headers: bool = False, stringify: bool = False, connection_id: Optional[int] = None, form_id: Optional[str] = None) -> Dict[str, Any]`**
+
+Create a new webhook.
+
+**Parameters:**
+- `name` (str): Name for the webhook
+- `type_name` (str): Type of webhook (default: 'gateway-webhook')
+- `method` (bool): Include HTTP method in request body
+- `headers` (bool): Include headers in request body
+- `stringify` (bool): Return JSON payloads as strings
+- `connection_id` (Optional[int]): Connection ID for app-specific webhooks
+- `form_id` (Optional[str]): Form ID for form-specific webhooks
+
+**Returns:** Created webhook data including ID and URL
+
+**Note:** This method has been updated to use the correct `headers` parameter name as required by the Make.com API. Previous versions used `header` (singular) which caused API validation errors.
+
+**Example:**
+```python
+# Create a basic webhook
+webhook = creator.create_webhook("My API Webhook")
+print(f"Webhook URL: {webhook['url']}")
+print(f"Webhook ID: {webhook['id']}")
+
+# Create webhook with custom settings
+advanced_webhook = creator.create_webhook(
+    name="Advanced API Webhook",
+    method=True,
+    headers=True,  # Correctly uses 'headers' parameter
+    stringify=False
+)
+```
+
+#### **`get_hook_details(hook_id: int) -> Dict[str, Any]`**
+
+Get details of a specific hook.
+
+**Parameters:**
+- `hook_id` (int): ID of the hook
+
+**Returns:** Hook details including configuration and status
+
+**Example:**
+```python
+hook_details = creator.get_hook_details(12345)
+print(f"Hook name: {hook_details['name']}")
+print(f"Hook URL: {hook_details['url']}")
+print(f"Hook enabled: {hook_details['enabled']}")
+print(f"Assigned to scenario: {hook_details.get('scenarioId')}")
+```
+
+#### **`delete_hook(hook_id: int, confirmed: bool = False) -> Dict[str, Any]`**
+
+Delete a hook.
+
+**Parameters:**
+- `hook_id` (int): ID of the hook to delete
+- `confirmed` (bool): Confirm deletion if hook is assigned to scenario
+
+**Returns:** Deletion response
+
+**Example:**
+```python
+# Delete unassigned hook
+creator.delete_hook(12345)
+
+# Force delete assigned hook (requires confirmation)
+creator.delete_hook(12345, confirmed=True)
+```
+
+#### **`update_hook(hook_id: int, name: str) -> Dict[str, Any]`**
+
+Update a hook's name.
+
+**Parameters:**
+- `hook_id` (int): ID of the hook to update
+- `name` (str): New name for the hook
+
+**Returns:** Updated hook data
+
+**Example:**
+```python
+updated_hook = creator.update_hook(12345, "Updated Webhook Name")
+print(f"Hook renamed to: {updated_hook['name']}")
+```
+
+### **Blueprint Hook Management**
+
+#### **`replace_hardcoded_hooks_in_blueprint(blueprint: Dict[str, Any], hook_mapping: Optional[Dict[int, int]] = None, create_new_hooks: bool = True, webhook_name_prefix: str = "Auto-created Webhook") -> Dict[str, Any]`**
+
+Replace hardcoded hook IDs in a blueprint with new ones.
+
+**Parameters:**
+- `blueprint` (Dict[str, Any]): Blueprint to process
+- `hook_mapping` (Optional[Dict[int, int]]): Mapping of old hook ID to new hook ID
+- `create_new_hooks` (bool): Whether to create new hooks automatically
+- `webhook_name_prefix` (str): Prefix for auto-created webhook names
+
+**Returns:** Updated blueprint with new hook IDs
+
+**Example:**
+```python
+# Automatically create new hooks for hardcoded ones
+updated_blueprint = creator.replace_hardcoded_hooks_in_blueprint(
+    blueprint=my_blueprint,
+    webhook_name_prefix="My App Webhook"
+)
+
+# Use existing hook mapping
+hook_mapping = {836593: 999999}  # old_id: new_id
+updated_blueprint = creator.replace_hardcoded_hooks_in_blueprint(
+    blueprint=my_blueprint,
+    hook_mapping=hook_mapping,
+    create_new_hooks=False
+)
+
+# Find what hooks were replaced
+original_hooks = creator._find_hardcoded_hooks(my_blueprint)
+new_hooks = creator._find_hardcoded_hooks(updated_blueprint)
+print(f"Replaced hooks: {original_hooks} -> {new_hooks}")
+```
+
+#### **`create_scenario_with_new_hooks(blueprint: Union[Dict[str, Any], str], name: Optional[str] = None, folder_id: Optional[int] = None, scheduling: Optional[Dict[str, Any]] = None, webhook_name_prefix: str = "Auto-created Webhook") -> Dict[str, Any]`**
+
+Create a scenario from a blueprint, automatically creating new webhooks for any hardcoded hook IDs.
+
+**Parameters:**
+- `blueprint` (Union[Dict[str, Any], str]): Blueprint data or JSON string
+- `name` (Optional[str]): Override name for the scenario
+- `folder_id` (Optional[int]): Folder ID to place the scenario in
+- `scheduling` (Optional[Dict[str, Any]]): Scheduling configuration
+- `webhook_name_prefix` (str): Prefix for auto-created webhook names
+
+**Returns:** Created scenario data
+
+**Example:**
+```python
+# Create scenario with automatic webhook creation
+scenario = creator.create_scenario_with_new_hooks(
+    blueprint=my_blueprint,
+    name="My New Scenario",
+    webhook_name_prefix="My App"
+)
+
+print(f"Created scenario: {scenario['id']}")
+print(f"Scenario name: {scenario['name']}")
+
+# The method automatically:
+# 1. Finds hardcoded hook IDs in the blueprint
+# 2. Creates new webhooks for each hardcoded hook
+# 3. Replaces the hardcoded IDs with new webhook IDs
+# 4. Creates the scenario with the updated blueprint
+```
+
+### **Webhook Management Workflow Examples**
+
+#### **Resolving Hook Assignment Conflicts**
+```python
+# Problem: Blueprint has hardcoded hook ID that's already assigned
+try:
+    # This would fail with "The hook already has a scenario assigned"
+    scenario = creator.create_scenario(blueprint_with_hardcoded_hooks)
+except MakeAPIError as e:
+    if "hook already has a scenario assigned" in str(e):
+        print("Hook conflict detected, creating scenario with new hooks...")
+        
+        # Solution: Use automatic hook replacement
+        scenario = creator.create_scenario_with_new_hooks(
+            blueprint=blueprint_with_hardcoded_hooks,
+            webhook_name_prefix="New Deployment"
+        )
+        print(f"✅ Scenario created with new hooks: {scenario['id']}")
+```
+
+#### **Managing Webhook Lifecycle**
+```python
+# 1. Create webhook for new integration
+webhook = creator.create_webhook(
+    name="Customer API Integration",
+    method=True,
+    headers=True
+)
+
+print(f"New webhook created: {webhook['url']}")
+
+# 2. Use webhook in blueprint
+blueprint = creator.create_webhook_blueprint(
+    name="Customer Integration Scenario",
+    webhook_name="Customer API Integration"
+)
+
+# 3. Replace any hardcoded hooks with our new webhook
+hook_mapping = {836593: webhook['id']}  # Replace hardcoded with new
+updated_blueprint = creator.replace_hardcoded_hooks_in_blueprint(
+    blueprint=blueprint,
+    hook_mapping=hook_mapping,
+    create_new_hooks=False
+)
+
+# 4. Create scenario
+scenario = creator.create_scenario(updated_blueprint)
+
+# 5. Clean up old unused webhooks
+old_hooks = creator.list_hooks(assigned=False)
+for hook in old_hooks:
+    if "test" in hook['name'].lower():
+        creator.delete_hook(hook['id'])
+        print(f"Deleted test webhook: {hook['name']}")
+```
+
+#### **Bulk Webhook Management**
+```python
+# Create multiple scenarios from same blueprint template
+blueprint_template = creator.create_webhook_blueprint(
+    name="API Integration Template",
+    webhook_name="API Webhook"
+)
+
+customers = ["CustomerA", "CustomerB", "CustomerC"]
+created_scenarios = []
+
+for customer in customers:
+    # Each customer gets their own scenario with unique webhooks
+    scenario = creator.create_scenario_with_new_hooks(
+        blueprint=blueprint_template,
+        name=f"{customer} API Integration",
+        webhook_name_prefix=f"{customer} Webhook"
+    )
+    
+    created_scenarios.append({
+        'customer': customer,
+        'scenario_id': scenario['id'],
+        'scenario_name': scenario['name']
+    })
+    
+    print(f"✅ Created scenario for {customer}: {scenario['id']}")
+
+# Activate all scenarios
+for scenario_info in created_scenarios:
+    creator.activate_scenario(scenario_info['scenario_id'])
+    print(f"✅ Activated {scenario_info['customer']} scenario")
 ```
 
 ---

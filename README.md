@@ -133,6 +133,19 @@ Get team and organization information:
 make-team-info
 ```
 
+### `make-google-calendar-swaig`
+Create Google Calendar SWAIG integration scenarios:
+```bash
+# Interactive mode
+make-google-calendar-swaig
+
+# Specify email directly
+make-google-calendar-swaig --email user@example.com
+
+# Create and deploy automatically
+make-google-calendar-swaig --email user@example.com --name "My Calendar Bot" --activate
+```
+
 ## 🚀 Quick Start
 
 ### Using as a Package
@@ -140,7 +153,10 @@ make-team-info
 ```python
 from make_blueprint_creator import MakeBlueprintCreator, MakeConfig
 
-# Initialize configuration
+# Initialize configuration from environment variables (recommended)
+config = MakeConfig.from_env()
+
+# Or initialize manually
 config = MakeConfig(
     api_token="your_api_token",
     team_id=123,
@@ -298,6 +314,32 @@ scenario = creator.create_scenario(webhook_email_blueprint)
 http_db_blueprint = examples["http_to_database"]
 scenario = creator.create_scenario(http_db_blueprint)
 ```
+
+### Google Calendar SWAIG Integration
+
+```python
+from make_blueprint_creator.examples.google_calendar_swaig import create_google_calendar_swaig_blueprint
+
+# Create Google Calendar SWAIG blueprint
+calendar_blueprint = create_google_calendar_swaig_blueprint(
+    email="user@example.com",
+    scenario_name="Calendar AI Assistant",
+    webhook_name="SWAIG Calendar Webhook"
+)
+
+# Deploy the scenario
+scenario = creator.create_scenario(calendar_blueprint)
+creator.activate_scenario(scenario['id'])
+
+print(f"Google Calendar SWAIG scenario created: {scenario['name']}")
+```
+
+This creates a complete SignalWire AI Gateway integration that enables:
+- **Voice-controlled event creation**: "Schedule a meeting tomorrow at 2 PM"
+- **Calendar availability checking**: "Am I free on Friday afternoon?"
+- **Natural language processing**: Converts speech to calendar actions
+
+See [Google Calendar SWAIG Documentation](docs/GOOGLE_CALENDAR_SWAIG.md) for detailed setup and usage instructions.
 
 ## Advanced Usage
 

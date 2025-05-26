@@ -80,6 +80,7 @@ setup(
             'make-blueprint=make_blueprint_creator.cli.main:main',
             'make-examples=make_blueprint_creator.cli.examples:main',
             'make-team-info=make_blueprint_creator.cli.team_info:main',
+            'make-google-calendar-swaig=make_blueprint_creator.cli.google_calendar_swaig:main',
         ],
     },
     include_package_data=True,

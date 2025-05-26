@@ -8,6 +8,7 @@ Author: AI Assistant
 Date: 2025-01-27
 """
 
+import os
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
 from .exceptions import MakeConfigError
@@ -65,6 +66,78 @@ class MakeConfig:
         
         # Remove trailing slash from base URL
         self.base_url = self.base_url.rstrip('/')
+    
+    @classmethod
+    def from_env(cls) -> 'MakeConfig':
+        """
+        Create MakeConfig from environment variables.
+        
+        Environment variables used:
+        - MAKE_API_TOKEN (required): Make.com API token
+        - MAKE_TEAM_ID (conditional): Team ID for team-based access
+        - MAKE_ORGANIZATION_ID (conditional): Organization ID for org-based access
+        - MAKE_API_BASE_URL (optional): API base URL (defaults to US region)
+        
+        Either MAKE_TEAM_ID or MAKE_ORGANIZATION_ID must be provided.
+        If both are provided, MAKE_TEAM_ID takes precedence.
+        
+        Returns:
+            MakeConfig: Configuration instance
+            
+        Raises:
+            MakeConfigError: If required environment variables are missing
+            
+        Example:
+            >>> # Set environment variables first
+            >>> os.environ['MAKE_API_TOKEN'] = 'your_token'
+            >>> os.environ['MAKE_TEAM_ID'] = '123'
+            >>> config = MakeConfig.from_env()
+        """
+        api_token = os.getenv('MAKE_API_TOKEN')
+        team_id = os.getenv('MAKE_TEAM_ID')
+        organization_id = os.getenv('MAKE_ORGANIZATION_ID')
+        base_url = os.getenv('MAKE_API_BASE_URL', 'https://us2.make.com/api/v2')
+        
+        if not api_token:
+            raise MakeConfigError(
+                "MAKE_API_TOKEN environment variable is required. "
+                "Set it with: export MAKE_API_TOKEN='your_token_here'"
+            )
+        
+        if not team_id and not organization_id:
+            raise MakeConfigError(
+                "Either MAKE_TEAM_ID or MAKE_ORGANIZATION_ID environment variable is required. "
+                "Set one with: export MAKE_TEAM_ID='your_team_id' or export MAKE_ORGANIZATION_ID='your_org_id'"
+            )
+        
+        # Prioritize team_id over organization_id if both are set
+        if team_id:
+            try:
+                team_id_int = int(team_id)
+            except ValueError:
+                raise MakeConfigError(f"MAKE_TEAM_ID must be a valid integer, got: {team_id}")
+            
+            return cls(
+                api_token=api_token,
+                base_url=base_url,
+                team_id=team_id_int
+            )
+        elif organization_id:
+            try:
+                organization_id_int = int(organization_id)
+            except ValueError:
+                raise MakeConfigError(f"MAKE_ORGANIZATION_ID must be a valid integer, got: {organization_id}")
+            
+            return cls(
+                api_token=api_token,
+                base_url=base_url,
+                organization_id=organization_id_int
+            )
+        else:
+            # This should never happen due to the check above, but for type safety
+            raise MakeConfigError(
+                "Either MAKE_TEAM_ID or MAKE_ORGANIZATION_ID environment variable is required"
+            )
     
     @property
     def is_organization_based(self) -> bool:

@@ -5,6 +5,106 @@ All notable changes to the Make.com Blueprint Creator will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Google Calendar SWAIG Integration** - Complete SignalWire AI Gateway integration for voice-controlled calendar operations
+  - **Reasoning**: Enables natural language calendar management through AI-powered voice interactions
+  - **Impact**: Provides ready-to-use SWAIG scenario for calendar automation
+  - **Files Added**: 
+    - `src/make_blueprint_creator/examples/google_calendar_swaig.py`
+    - `src/make_blueprint_creator/cli/google_calendar_swaig.py`
+    - `scripts/create_google_calendar_swaig.py`
+    - `docs/GOOGLE_CALENDAR_SWAIG.md`
+  - **CLI Command**: `make-google-calendar-swaig` for interactive blueprint creation
+  - **Features**:
+    - Voice-controlled event creation ("Schedule a meeting tomorrow at 2 PM")
+    - Calendar availability checking ("Am I free on Friday afternoon?")
+    - Dynamic email configuration with user prompts
+    - Comprehensive error handling and validation
+    - Multiple deployment options (CLI, Python API, standalone script)
+- **MakeConfig.from_env() class method**: Added a new class method to create MakeConfig instances directly from environment variables
+  - **Reasoning**: Simplifies configuration setup and eliminates the need to manually handle environment variables in multiple places
+  - **Impact**: Makes the package easier to use and reduces boilerplate code
+  - **Files Modified**: `src/make_blueprint_creator/core/config.py`
+  - **Usage**: `config = MakeConfig.from_env()` instead of manually reading environment variables
+
+### Changed
+- **Updated setup.py** - Added new CLI entry point for Google Calendar SWAIG tool
+- **Updated README.md** - Added documentation and examples for Google Calendar SWAIG integration
+- **Enhanced CLI ecosystem** - Expanded command-line tools with specialized SWAIG integration
+
+### Fixed
+- **CLI Entry Point Missing**: Fixed missing `make-google-calendar-swaig` CLI command
+  - **Problem**: The `make-google-calendar-swaig` CLI command was not available after package installation, showing "command not found" error
+  - **Root Cause**: The `pyproject.toml` file was missing the entry point for the Google Calendar SWAIG CLI command, and since `pyproject.toml` takes precedence over `setup.py`, the entry point wasn't being installed
+  - **Solution**: Added the missing entry point `make-google-calendar-swaig = "make_blueprint_creator.cli.google_calendar_swaig:main"` to the `[project.scripts]` section in `pyproject.toml`
+  - **Files Modified**: `pyproject.toml`
+  - **Impact**: The CLI command is now properly installed and available after `pip install -e .`
+  - **Testing**: Verified that `make-google-calendar-swaig --help` works correctly and shows the expected usage information
+
+- **Make.com Webhook API Parameter Error**: Fixed "Missing value of required parameter 'headers'" error when creating webhooks
+  - **Problem**: Make.com API was returning "400 Bad Request: Missing value of required parameter 'headers'" when creating webhooks
+  - **Root Cause**: The webhook creation payload was using `"header": headers` (singular) instead of `"headers": headers` (plural) as required by the API
+  - **Solution**: Updated the `create_webhook()` method to use the correct parameter name `"headers"`
+  - **Files Modified**: `src/make_blueprint_creator/core/blueprint_creator.py`
+  - **Impact**: Eliminates webhook creation API errors and enables successful automatic webhook creation for scenarios
+  - **Testing**: Verified with comprehensive test that creates and deletes webhooks successfully
+
+- **Type safety in list_hooks method**: Fixed linter errors where string values were assigned to parameters expecting integers
+  - **Problem**: Type checker was flagging incorrect type assignments in the `list_hooks()` method parameters
+  - **Solution**: Added proper type annotation `Dict[str, Any]` for the params dictionary
+  - **Files Modified**: `src/make_blueprint_creator/core/blueprint_creator.py`
+  - **Impact**: Improves type safety and eliminates linter warnings
+
+- **TypeError in MakeConfig initialization**: Fixed multiple instances where `MakeConfig()` was called without required arguments
+  - **Problem**: Several files were calling `MakeConfig()` without the required `api_token` parameter, causing TypeError
+  - **Solution**: Updated all instances to use the new `MakeConfig.from_env()` method
+  - **Files Modified**: 
+    - `scripts/create_google_calendar_swaig.py`
+    - `src/make_blueprint_creator/cli/google_calendar_swaig.py`
+    - `docs/GOOGLE_CALENDAR_SWAIG.md`
+  - **Impact**: Eliminates runtime errors when using the package with environment variables
+
+- **Type safety in scenario activation**: Fixed type issues where scenario dictionaries were passed to functions expecting integers
+  - **Problem**: `create_scenario()` returns a dictionary but `activate_scenario()` expects an integer scenario ID
+  - **Solution**: Extract the `id` field from the scenario dictionary before passing to activation functions
+  - **Files Modified**: 
+    - `scripts/create_google_calendar_swaig.py`
+    - `src/make_blueprint_creator/cli/google_calendar_swaig.py`
+    - `src/make_blueprint_creator/examples/google_calendar_swaig.py`
+  - **Impact**: Prevents type errors and ensures proper scenario activation
+
+- **Make.com API 400 Error - Missing scheduling parameter**: Fixed API validation error when creating scenarios
+  - **Problem**: Make.com API was returning "400 Bad Request: Missing value of required parameter 'scheduling'" when creating scenarios
+  - **Root Cause**: The API requires a scheduling parameter, but the package wasn't providing a default value
+  - **Solution**: Added default scheduling configuration `{"type": "indefinitely"}` when no scheduling is specified
+  - **Files Modified**: `src/make_blueprint_creator/core/blueprint_creator.py`
+  - **Impact**: Eliminates API errors and allows successful scenario creation
+  - **API Compatibility**: Ensures proper JSON serialization of scheduling parameters
+
+- **Hook assignment conflict**: Fixed "The hook already has a scenario assigned" error (IM000)
+  - **Problem**: Blueprints contained hardcoded hook ID (836593) that was already assigned to another scenario
+  - **Root Cause**: Make.com doesn't allow the same webhook/hook to be assigned to multiple scenarios
+  - **Solution**: Implemented comprehensive webhook management system to automatically create new webhooks
+  - **Implementation**:
+    - Added `list_hooks()`, `create_webhook()`, `get_hook_details()`, `delete_hook()`, `update_hook()` methods
+    - Added `replace_hardcoded_hooks_in_blueprint()` to find and replace hardcoded hook IDs
+    - Added `create_scenario_with_new_hooks()` for automatic webhook creation during scenario deployment
+    - Added `_find_hardcoded_hooks()` and `_replace_hook_ids_recursive()` helper methods
+    - Updated Google Calendar SWAIG examples to use new webhook functionality
+  - **Files Modified**:
+    - `src/make_blueprint_creator/core/blueprint_creator.py` (added 200+ lines of webhook management)
+    - `src/make_blueprint_creator/examples/google_calendar_swaig.py`
+    - `scripts/create_google_calendar_swaig.py`
+  - **Impact**: Eliminates hook assignment conflicts, enables automatic webhook creation, allows multiple scenario deployments from same blueprint
+
+- **Code quality improvements**: Fixed unused imports and type annotations
+  - **Removed unused imports**: `datetime`, `Optional`, `MakeConfigError`, `MakeBlueprintError` from various files
+  - **Fixed type safety**: Corrected scheduling parameter serialization to JSON strings
+  - **Files Modified**: Multiple files across the codebase
+  - **Impact**: Cleaner code, better type safety, reduced linter warnings
+
 ## [1.0.0] - 2025-01-27
 
 ### 🎉 Initial Release
